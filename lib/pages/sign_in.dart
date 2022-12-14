@@ -15,7 +15,7 @@ class SignInPage extends StatelessWidget {
           children: [
             Text("Sign in to continue"),
             Text(
-              "Foodiez",
+              "Note Firebase",
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,

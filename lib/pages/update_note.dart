@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:foodfirebase221210/auth/db_service.dart';
 import 'package:foodfirebase221210/pages/home_page.dart';
+import 'package:foodfirebase221210/pages/view_note.dart';
 
-class CreateNotePage extends StatefulWidget {
-  const CreateNotePage({Key? key}) : super(key: key);
+class UpdateNotePage extends StatefulWidget {
+  UpdateNotePage({Key? key, this.id, this.title, this.body}) : super(key: key);
+
+  String? id;
+  String? title;
+  String? body;
 
   @override
-  State<CreateNotePage> createState() => _CreateNotePageState();
+  State<UpdateNotePage> createState() => _UpdateNotePageState();
 }
 
-class _CreateNotePageState extends State<CreateNotePage> {
+class _UpdateNotePageState extends State<UpdateNotePage> {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController title = TextEditingController();
   TextEditingController body = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    setState(() {
+      title.text = widget.title!;
+      body.text = widget.body!;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Note"),
+        title: const Text("Update Note"),
       ),
       body: CustomScrollView(
         slivers: [
@@ -66,18 +80,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (key.currentState!.validate()) {
-            DbHelper().add(title: title.text.trim(), body: body.text.trim()).then(
+            DbHelper().update(id: widget.id, title: title.text.trim(), body: body.text.trim()).then(
               (value) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
               },
             );
           }
-          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()), (route) => false);
         },
         label: Row(
           children: [
             Icon(Icons.add),
-            Text("Save note"),
+            Text("Update note"),
           ],
         ),
       ),
